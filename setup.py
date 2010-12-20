@@ -10,5 +10,6 @@ setup(name='django-uploadify',
         author='Glenn Siegman',
         author_email='gsiegman@gsiegman.com',
         url='http://github.com/gsiegman/django-uploadify',
-        packages=['uploadify']
+        packages=['uploadify', 'uploadify.templatetags'],
+        package_data={'uploadify': ['templates/uploadify/*.html']}
 )
