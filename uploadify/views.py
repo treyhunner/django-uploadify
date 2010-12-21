@@ -2,13 +2,12 @@ from django.dispatch import Signal
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
-upload_received = Signal(providing_args=['data'])
+upload_received = Signal(providing_args=['request', 'data'])
 
 @csrf_exempt
 def upload(request, *args, **kwargs):
     if request.method == 'POST':
         if request.FILES:
-            upload_received.send(sender='uploadify', data=request.FILES['Filedata'])
+            upload_received.send(sender='uploadify', request=request,
+                data=request.FILES['Filedata'])
     return HttpResponse('1')
-
-
