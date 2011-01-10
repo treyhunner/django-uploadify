@@ -1,8 +1,8 @@
 from django.conf import settings
-STATIC_UR:L = getattr(settings, 'STATIC_URL', '')
+STATIC_URL = getattr(settings, 'STATIC_URL', '')
 MEDIA_URL = getattr(settings, 'MEDIA_URL', '')
 
-# Uploadify root folder path, relative to MEDIA_
+# Uploadify root folder path, relative to STATIC_URL
 UPLOADIFY_PATH = getattr(settings, 'UPLOADIFY_PATH', 
     '%s%s' % (STATIC_URL, 'js/uploadify/'))
 
