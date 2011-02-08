@@ -3,6 +3,11 @@
 <div id="uploadify" class="multi_file_upload"><input id="fileInput" name="fileInput" type="file" /></div>
 <script type="text/javascript">// <![CDATA[
     $(document).ready(function() {
+        if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)) { //test for MSIE x.x;
+            var ieversion=new Number(RegExp.$1) // capture x.x portion and store as a number
+            if (ieversion < 8)
+                return;
+        }
         $('#fileInput').uploadify({
             'uploader': '{{ uploadify_path }}uploadify.swf',
             'script': '{% url uploadify_upload %}{{ GET_query }}',
@@ -11,7 +16,7 @@
             'removeCompleted': false,
             'multi': true,
             'onAllComplete': uploadify_allComplete,
-            'onCancel': uploadify_cancelUpload,
+            'onCancel': uploadify_cancelUpload
         });
     });
 
