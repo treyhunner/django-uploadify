@@ -16,7 +16,8 @@
             'removeCompleted': false,
             'multi': true,
             'onAllComplete': uploadify_allComplete,
-            'onCancel': uploadify_cancelUpload
+            'onCancel': uploadify_cancelUpload,
+            'onComplete': uploadify_complete
         });
     });
 
@@ -25,5 +26,8 @@
     }
     function uploadify_cancelUpload(event, data) {
         $('#uploadify').trigger('cancelUpload', data);
+    }
+    function uploadify_complete(event, ID, fileObj, response, data) {
+        $('#uploadify').trigger('complete', [ID, fileObj, response, data]);
     }
 // ]]></script>
