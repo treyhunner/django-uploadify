@@ -8,6 +8,7 @@ upload_received = Signal(providing_args=['request', 'data'])
 def upload(request, *args, **kwargs):
     if request.method == 'POST':
         if request.FILES:
-            upload_received.send(sender='uploadify', request=request,
-                data=request.FILES['Filedata'])
+            file_url = upload_received.send(sender='uploadify', request=request,
+                data=request.FILES['Filedata'])[-1][1]
+            return HttpResponse(file_url)
     return HttpResponse('1')
