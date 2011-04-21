@@ -9,11 +9,14 @@ upload_received = Signal(providing_args=['request', 'data'])
 def upload(request, *args, **kwargs):
     if request.method == 'POST':
         sender='uploadify'
+        filename = 'Filename'
         if request.POST.has_key('sender'):
             sender = request.POST['sender']
+        if request.POST.has_key('fileDataName'):
+            filename = request.POST['fileDataName']
         if request.FILES:
             receiveds = upload_received.send(sender=sender, request=request,
-                data=request.FILES['file'])
+                data=request.FILES[filename])
             for received, response in receiveds:
                 if not response is None:
                     return JsonResponse(response)

@@ -8,12 +8,12 @@ register = template.Library()
 #   multi_file_upload
 # -----------------------------------------------------------------------------
 @register.inclusion_tag('uploadify/multi_file_upload.html', takes_context=True)
-def multi_file_upload(context, sender=None, unique_id=None):
+def multi_file_upload(context, sender=None, filename='Filename', unique_id=None):
     """
     Displays a Flash-based interface for uploading multiple files.
     For each POST request (after file upload) send GET query with `unique_id`.
     """
-    data = {}
+    data = {'fileDataName': filename}
 
     if sender is not None:
         data['sender'] = str(sender)
@@ -27,4 +27,5 @@ def multi_file_upload(context, sender=None, unique_id=None):
         'uploadify_query' : unique_id,
         'uploadify_data' : simplejson.dumps(data),
         'uploadify_path' : settings.UPLOADIFY_PATH,
+        'uploadify_filename' : filename,
     }
