@@ -3,7 +3,9 @@
 <link rel="stylesheet" type="text/css" href="{{ uploadify_path }}uploadify.css" />
 <div id="uploadify" class="multi_file_upload">
 <input id="fileInput" name="fileInput" type="file" />
+{% if not uploadify_auto %}
 <input type="button" value="Upload" id="upload" />
+{% endif %}
 </div>
 <script type="text/javascript">// <![CDATA[
     $(document).ready(function() {
@@ -17,12 +19,12 @@
             'script': '{% url uploadify_upload %}{{ uploadify_query }}',
             'scriptData': {{ uploadify_data|safe }},
             'cancelImg': '{{ uploadify_path }}cancel.png',
-            'fileDataName': '{{ uploadify_filename }}',
             'removeCompleted': false,
             'multi': true,
             'onAllComplete': uploadify_allComplete,
             'onCancel': uploadify_cancelUpload,
-            'onComplete': uploadify_complete
+            'onComplete': uploadify_complete,
+            {{ uploadify_options|safe }}
         });
 
         $('#upload').click(function(){
@@ -45,7 +47,7 @@
 
             var file_percentage = file_div.find('.percentage');
             file_percentage.text(' -');
-            $(response.{{ uploadify_filename }}).each(function(){
+            $(response.{{ uploadify_filename|safe }}).each(function(){
                 file_percentage.text(file_percentage.text()+" "+this);
             });
 
