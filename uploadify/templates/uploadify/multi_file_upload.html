@@ -1,6 +1,12 @@
 <script type="text/javascript" src="{{ uploadify_path }}swfobject.js"></script>
 <script type="text/javascript" src="{{ uploadify_path }}jquery.uploadify.js"></script>
-<div id="uploadify" class="multi_file_upload"><input id="fileInput" name="fileInput" type="file" /></div>
+<link rel="stylesheet" type="text/css" href="{{ uploadify_path }}uploadify.css" />
+<div id="uploadify" class="multi_file_upload">
+<input id="fileInput" name="fileInput" type="file" />
+{% if not uploadify_auto %}
+<input type="button" value="Upload" id="upload" />
+{% endif %}
+</div>
 <script type="text/javascript">// <![CDATA[
     $(document).ready(function() {
         if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)) { //test for MSIE x.x;
@@ -10,14 +16,19 @@
         }
         $('#fileInput').uploadify({
             'uploader': '{{ uploadify_path }}uploadify.swf',
-            'script': '{% url uploadify_upload %}{{ GET_query }}',
+            'script': '{% url uploadify_upload %}{{ uploadify_query }}',
+            'scriptData': {{ uploadify_data|safe }},
             'cancelImg': '{{ uploadify_path }}cancel.png',
-            'auto': true,
             'removeCompleted': false,
             'multi': true,
             'onAllComplete': uploadify_allComplete,
             'onCancel': uploadify_cancelUpload,
-            'onComplete': uploadify_complete
+            'onComplete': uploadify_complete,
+            {{ uploadify_options|safe }}
+        });
+
+        $('#upload').click(function(){
+            $('#fileInput').uploadifyUpload();
         });
     });
 
@@ -28,6 +39,21 @@
         $('#uploadify').trigger('cancelUpload', data);
     }
     function uploadify_complete(event, ID, fileObj, response, data) {
+        if (response!='1'){
+            response = eval('(' +response +')');
+
+            var file_div = jQuery("#" + jQuery(event.target).attr('id') + ID);
+            file_div.addClass('error');
+
+            var file_percentage = file_div.find('.percentage');
+            file_percentage.text(' -');
+            $(response.{{ uploadify_filename|safe }}).each(function(){
+                file_percentage.text(file_percentage.text()+" "+this);
+            });
+
+            return false;
+        }
         $('#uploadify').trigger('complete', [ID, fileObj, response, data]);
+        $('#upload').hide();
     }
 // ]]></script>
