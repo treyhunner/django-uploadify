@@ -1,6 +1,8 @@
 from django import template
-from uploadify import settings
+from django.template import resolve_variable
 from django.utils import simplejson
+
+from uploadify import settings
 
 register = template.Library()
 
@@ -8,34 +10,43 @@ register = template.Library()
 #   multi_file_upload
 # -----------------------------------------------------------------------------
 class MultiFileUpload(template.Node):
-    def __init__(self, sender='uploadify', unique_id=None, options={}, data={}):
+    def __init__(self, sender='"uploadify"', unique_id=None, data=None, **kwargs):
         self.sender = sender
         self.unique_id = unique_id
-        self.options = {'fileDataName': 'Filedata'}
-        self.options.update(options)
-        self.data = {'fileDataName': self.options['fileDataName'],
-                     'sender': str(self.sender)}
-        self.data.update(data)
-
+        self.data = data or {}
+        self.options = kwargs
+        """
+        for var in kwargs:
+            self.options[var] = Variable(kwargs[var])
+        """
+       
     def render(self, context):
         if self.unique_id is not None:
-            unique_id = "?unique_id=%s" % str(self.unique_id)
+            unique_id = "?unique_id=%s" % str(resolve_variable(self.unique_id, context))
         else:
             unique_id = ""
 
-        js_options = ",".join(map(lambda k: "'%s': '%s'" % (k, self.options[k]),
-                                  self.options))
+        options = {'fileDataName': 'Filedata'}
+        for key, value in self.options.items():
+            options[key] = resolve_variable(value, context)
+        js_options = ",".join(map(lambda item: "'%s': '%s'" % (item[0], item[1]),
+                                  options.items()))
 
-        auto = False
-        if self.options.has_key('auto') and self.options['auto']:
-            auto = True
+        auto = options.get('auto', False)
+        
+        data = {
+            'fileDataName': options['fileDataName'],
+            'sender': str(resolve_variable(self.sender, context)),
+        }
+        for key, value in self.data.items():
+            data[key] = resolve_variable(value, context)
 
         context.update({
             'uploadify_query': unique_id,
-            'uploadify_data': simplejson.dumps(self.data),
+            'uploadify_data': simplejson.dumps(data),
             'uploadify_path': settings.UPLOADIFY_PATH,
             'uploadify_options': js_options,
-            'uploadify_filename': self.options['fileDataName'],
+            'uploadify_filename': options['fileDataName'],
             'uploadify_auto': auto,
         })
 
@@ -58,19 +69,10 @@ def multi_file_upload(parser, token):
     tag_name = args[0]
     args = args[1:]
 
-    sender = 'uploadify'
-    unique_id = None
     options = {}
-
     for arg in args:
         name, val = arg.split("=")
         val = val.replace('\'', '').replace('"', '')
-        if name == 'sender':
-            sender = val
-        elif name == 'unique_id':
-            unique_id = val
-        else:
-            options[name] = val
+        options[name] = val
 
-    return MultiFileUpload(sender, unique_id, options)
-
+    return MultiFileUpload(**options)
