@@ -8,6 +8,22 @@
 {% endif %}
 </div>
 <script type="text/javascript">// <![CDATA[
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
     $(document).ready(function() {
         if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)) { //test for MSIE x.x;
             var ieversion=new Number(RegExp.$1) // capture x.x portion and store as a number
@@ -17,7 +33,7 @@
         $('#fileInput').uploadify({
             'uploader': '{{ uploadify_path }}uploadify.swf',
             'script': '{% url uploadify_upload %}{{ uploadify_query }}',
-            'scriptData': {{ uploadify_data|safe }},
+            'scriptData': {'sessionid': getCookie('sessionid'), {{ uploadify_data|safe }}},
             'cancelImg': '{{ uploadify_path }}cancel.png',
             'removeCompleted': false,
             'multi': true,
@@ -39,6 +55,16 @@
         $('#uploadify').trigger('cancelUpload', data);
     }
     function uploadify_complete(event, ID, fileObj, response, data) {
+        var result = true;
+        response = $.parseJSON(response);
+        if (response.status == 'failed') {
+            var file_div = jQuery("#" + jQuery(event.target).attr('id') + ID);
+            file_div.addClass('uploadifyError');
+
+            file_div.find('.percentage').text(' - ' + response.status_msg);
+            result = false;
+        }
         $('#uploadify').trigger('complete', [ID, fileObj, response, data]);
+        return result;
     }
 // ]]></script>

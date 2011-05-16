@@ -15,10 +15,6 @@ class MultiFileUpload(template.Node):
         self.unique_id = unique_id
         self.data = data or {}
         self.options = kwargs
-        """
-        for var in kwargs:
-            self.options[var] = Variable(kwargs[var])
-        """
        
     def render(self, context):
         if self.unique_id is not None:
@@ -43,7 +39,7 @@ class MultiFileUpload(template.Node):
 
         context.update({
             'uploadify_query': unique_id,
-            'uploadify_data': simplejson.dumps(data),
+            'uploadify_data': simplejson.dumps(data)[1:-1],
             'uploadify_path': settings.UPLOADIFY_PATH,
             'uploadify_options': js_options,
             'uploadify_filename': options['fileDataName'],
