@@ -13,7 +13,7 @@ Installation
 Installing django-uploadify
 ---------------------------
 
-#) "Download django-uploadify":http://github.com/tstone/django-uploadify/downloads
+#) .. _"Download django-uploadify": http://github.com/tstone/django-uploadify/downloads
 #) Place the folder 'uploadify' somewhere on your Python path (either in your project directory or inside of Python26\Lib\site-packages\).
 #) Add 'uploadify' to your INSTALLED_APPS in your project's settings.py file
 #) Add a reference to uploadify in your urls.py... ::
@@ -23,7 +23,7 @@ Installing django-uploadify
 Installing Uploadify
 --------------------
 
-#) "Download uploadify":http://www.google.com/url?q=http://www.uploadify.com/
+#) .. _"Download uploadify": http://www.uploadify.com/
 #) Copy all of the 'uploadify' folder from the Uploadify distribution into your media root.  Default is: MEDIA_URL\js\uploadify\
 #) Rename the uploadify file from "jquery.uploadify.v2.1.0.min.js" (or whatever version it is) to simply "jquery.uploadify.js"
 #) In uploadify/settings.py, make sure the setting UPLOADIFY_PATH is set to the correct value if the uploadify folder is installed to a location other than the default.  Note that the UPLOADIFY_PATH setting is relative to the MEDIA_URL value.
@@ -31,8 +31,8 @@ Installing Uploadify
 Requrements
 -----------
 
-* django
-* django-misc
+* django >= 1.2
+* .. _django-misc: https://github.com/ilblackdragon/django-misc/
 
 Using django-uploadify
 ======================
@@ -73,14 +73,17 @@ Reference
 =========
 
 Client Side Event:  allUploadsComplete
-On the client side, a javascript event is provided to capture when all uploads have been completed.  It can be bound with the following jQuery code:
-<pre>$('#uploadify').bind('allUploadsComplete', function(e, data){
-     // This code executes on AllUploadsComplete event...
-}</pre>
+--------------------------------------
+On the client side, a javascript event is provided to capture when all uploads have been completed.  It can be bound with the following jQuery code: ::
 
-<h3>upload_complete_url Parameter</h3>
+    $('#uploadify').bind('allUploadsComplete', function(e, data){
+         // This code executes on AllUploadsComplete event...
+    }
+
+upload_complete_url Parameter
+-----------------------------
 When this page is fetched by the client-side javascript, the following Uploadify values are POST'ed to it:
-    * filesUploaded - The total number of files uploaded
-    * errors - The total number of errors while uploading
-    * allBytesLoaded - The total number of bytes uploaded
-    * speed - The average speed of all uploaded files
+* filesUploaded - The total number of files uploaded
+* errors - The total number of errors while uploading
+* allBytesLoaded - The total number of bytes uploaded
+* speed - The average speed of all uploaded files
