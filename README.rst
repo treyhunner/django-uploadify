@@ -15,7 +15,7 @@ Installing django-uploadify
 
 #) Install package ::
 
-    pip install git+http://github.com/frol/django-uploadify/downloads
+    pip install git+git://github.com/frol/django-uploadify.git
 
 #) Add 'uploadify' to your INSTALLED_APPS in your project's settings.py file
 #) Add a reference to uploadify in your urls.py... ::
