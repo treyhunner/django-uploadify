@@ -2,8 +2,8 @@ from django.dispatch import Signal
 from django.http import Http404
 from django.views.decorators.csrf import csrf_exempt
 
-from misc.json_encode import json_response
-from misc.utils import user_from_session_key
+from json_encode import json_response
+from utils import user_from_session_key
 
 upload_received = Signal(providing_args=['request', 'data'])
 

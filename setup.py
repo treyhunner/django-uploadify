@@ -11,5 +11,5 @@ setup(name='django-uploadify',
     url='http://github.com/frol/django-uploadify',
     packages=['uploadify', 'uploadify.templatetags'],
     package_data={'uploadify': ['templates/uploadify/*.html']},
-    install_requires = [ 'django >= 1.3', 'django-misc' ],
+    install_requires = [ 'django >= 1.3', ],
 )

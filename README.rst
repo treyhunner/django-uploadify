@@ -35,8 +35,6 @@ Requrements
 -----------
 
 * django >= 1.2
-.. _django-misc: https://github.com/ilblackdragon/django-misc/
-* django-misc_ - application with a lot of useful stuff
 
 Using django-uploadify
 ======================
