@@ -56,7 +56,7 @@ def multi_file_upload(parser, token):
     Displays a Flash-based interface for uploading multiple files.
     For each POST request (after file upload) send GET query with `unique_id`.
 
-    {% multi_file_upload sender='SomeThing' fileDataName='Filename' %}
+    {% multi_file_upload sender='SomeThing' fileDataName='Filedata' %}
 
     For all options see http://www.uploadify.com/documentation/
 
